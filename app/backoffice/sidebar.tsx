@@ -1,6 +1,6 @@
 import Profile from '@/components/sidebar/profile'
 import Link from 'next/link'
-import { Gauge as Dashboard, Users } from 'lucide-react'
+import { Gauge as Dashboard, Images, Users, Filter } from 'lucide-react'
 
 const Sidebar = () => {
   return (
@@ -27,6 +27,20 @@ const Sidebar = () => {
         >
           <Users />
           <h3 className="text-lg font-medium">Users</h3>
+        </Link>
+        <Link
+          href={'/backoffice/slides'}
+          className="flex justify-start items-center gap-4 w-full max-w-52 px-2 py-1 hover:bg-zinc-700 rounded-lg transisiotn-all duration-300"
+        >
+          <Images />
+          <h3 className="text-lg font-medium">Slides</h3>
+        </Link>
+        <Link
+          href={'/backoffice/categories'}
+          className="flex justify-start items-center gap-4 w-full max-w-52 px-2 py-1 hover:bg-zinc-700 rounded-lg transisiotn-all duration-300"
+        >
+          <Filter />
+          <h3 className="text-lg font-medium">Categories</h3>
         </Link>
       </div>
       <Profile />

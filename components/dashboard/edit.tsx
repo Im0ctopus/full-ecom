@@ -1,12 +1,6 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  Suspense,
-  useEffect,
-  useState,
-} from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { X, Plus } from 'lucide-react'
+import { X, Plus, LoaderCircle } from 'lucide-react'
 import { handleEditForm } from '@/lib/actions'
 import { useFormState } from 'react-dom'
 import { toast } from 'sonner'
@@ -20,7 +14,7 @@ type TProd = {
   price: number
   category: number
   sales: number
-  main: number | null
+  main: boolean
   discount: number | null
 }
 
@@ -29,11 +23,13 @@ const Edit = ({
   isOpen,
   setIsopen,
   categories,
+  getImage,
 }: {
   prod: TProd
   isOpen: boolean
   setIsopen: Dispatch<SetStateAction<boolean>>
   categories: any
+  getImage: () => Promise<void>
 }) => {
   const initialState = {
     message: '',
@@ -44,25 +40,35 @@ const Edit = ({
     initialState
   )
   const [newImage, setNewImage] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (state.message == 'Success') {
+      setLoading(false)
       setIsopen(false)
+      getImage()
       toast.success('Product edited with Success')
     } else if (state.message == 'Error') {
+      setLoading(false)
       toast.error('An Error occurred! Please try again later.')
     } else if (state.message == 'Missing') {
+      setLoading(false)
       toast.error('Please fill all the obligatory inputs!')
     } else if (state.message == 'Bigger') {
+      setLoading(false)
       toast.error("The discount can't be bigger than the product's price!")
     } else if (state.message == 'None') {
+      setLoading(false)
       toast.error(
         "Ensure that no image is in the 'none' position before proceeding."
       )
     } else if (state.message == 'Repeated') {
+      setLoading(false)
       toast.error(
         'Please ensure that each image has a distinct position assigned.'
       )
+    } else if (state.message == 'Too many') {
+      toast.error('You can only have 6 products on the first page')
     }
   }, [state])
 
@@ -76,6 +82,8 @@ const Edit = ({
       toast.error(
         'You may only include up to 5 images per product. Please remove one image before attempting to upload again.'
       )
+    } else if (imageState.message == 'No Image') {
+      toast.error('You need to choose an Image first.')
     }
   }, [imageState])
 
@@ -98,7 +106,9 @@ const Edit = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsopen(false)}
+            onClick={() => {
+              setIsopen(false)
+            }}
             className="fixed bg-black/60 inset-0 z-40"
           ></motion.div>
           <motion.form
@@ -174,6 +184,10 @@ const Edit = ({
                 />
               </div>
             </div>
+            <div className="flex justify-center items-center gap-1">
+              <label>Appear in first page:</label>
+              <input type="checkbox" defaultChecked={prod.main} name="main" />
+            </div>
             <div className="text-center w-10/12">
               <div className="flex flex-col justify-center items-start mx-auto max-w-full w-fit">
                 <label>Product images:</label>
@@ -190,10 +204,21 @@ const Edit = ({
               </div>
             </div>
             <div className="w-full flex justify-end px-10">
-              <button className="bg-zinc-200 hover:bg-zinc-300 px-2 py-1 rounded-xl transition-all duration-300 hover:scale-105">
+              <button
+                onClick={() => setLoading(true)}
+                className="bg-zinc-200 hover:bg-zinc-300 px-2 py-1 rounded-xl transition-all duration-300 hover:scale-105"
+              >
                 Save
               </button>
             </div>
+            {loading && (
+              <div className="inset-0 bg-white/60 absolute flex justify-center items-center rounded-lg">
+                <LoaderCircle
+                  size={75}
+                  className="animate-spin text-zinc-500"
+                />
+              </div>
+            )}
             <button
               type="button"
               onClick={() => {

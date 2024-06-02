@@ -7,6 +7,8 @@ import {
 import Prod from '@/components/dashboard/prod'
 import Guide from '@/components/dashboard/guide'
 import Create from '@/components/dashboard/create'
+import { Metadata } from 'next'
+import Refresh from '@/components/dashboard/refresh'
 
 type TProd = {
   id: number
@@ -15,8 +17,12 @@ type TProd = {
   price: number
   category: number
   sales: number
-  main: number | null
+  main: boolean
   discount: number | null
+}
+
+export const metadata: Metadata = {
+  title: 'Dashboard | The Store',
 }
 
 const Page = async () => {
@@ -32,11 +38,12 @@ const Page = async () => {
           </span>{' '}
           Store Products
         </div>
-        <div className="basis-1/2 max-w-96 py-12 text-center bg-zinc-200 rounded-xl border-2 border-zinc-700 text-xl font-medium">
+        <div className="basis-1/2 max-w-96 py-12 text-center bg-zinc-200 rounded-xl border-2 border-zinc-700 text-xl font-medium relative">
           <span className="font-bold underline">
             {(await getSalesNumber()) ?? 0}
           </span>{' '}
           Sales
+          <Refresh />
         </div>
       </div>
       <h1 className="w-full text-center text-5xl font-medium pt-6">

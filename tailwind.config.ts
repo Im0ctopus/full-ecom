@@ -15,8 +15,8 @@ const config: Config = {
       },
       keyframes: {
         skeleton: {
-          '0%, 100%': { 'background-color': 'rgb(228, 228, 231)' },
-          '50%': { 'background-color': 'rgb(161, 161, 170)' },
+          '0%, 100%': { 'background-color': 'rgb(244, 244, 245)' },
+          '50%': { 'background-color': 'rgb(228, 228, 231)' },
         },
       },
       animation: {

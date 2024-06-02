@@ -1,3 +1,4 @@
+import { handleUser } from '@/lib/queries'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import Google from 'next-auth/providers/google'
 
@@ -8,6 +9,12 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET ?? '',
     }),
   ],
+  callbacks: {
+    async signIn({ user }) {
+      await handleUser(user.email!)
+      return true
+    },
+  },
 }
 
 const handler = NextAuth(authOptions)

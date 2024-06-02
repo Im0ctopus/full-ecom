@@ -122,7 +122,7 @@ const Create = ({ categories }: { categories: any }) => {
                 </div>
               </div>
               <div className="w-full flex justify-end px-10">
-                <button className="bg-zinc-200 hover:bg-zinc-300 px-2 py-1 rounded-xl transition-all duration-300 hover:scale-105">
+                <button className="bg-zinc-200 hover:bg-zinc-300 px-2 py-1 rounded-xl transition-all duration-300">
                   Save
                 </button>
               </div>

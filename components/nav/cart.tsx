@@ -1,26 +1,39 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { X } from 'lucide-react'
-import { Dispatch, SetStateAction } from 'react'
+import { X, LoaderCircle } from 'lucide-react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Login_button from './login_button'
+import { getCartFromUser } from '@/lib/queries'
+import Product from './product'
+import Link from 'next/link'
 
 type TCart = {
-  userId: number
-  productId: number
-  sizeId?: number | null
+  id: number
+  userid: number
+  productid: number
   amount: number
 }
 
 const Cart = ({
   logged,
-  cart,
   isCartOpen,
   setIsCartOpen,
 }: {
   logged: boolean
-  cart: TCart[]
   isCartOpen: boolean
   setIsCartOpen: Dispatch<SetStateAction<boolean>>
 }) => {
+  const [cart, setCart] = useState<TCart[] | null>(null)
+
+  async function getCart() {
+    setCart(null)
+    const cart = await getCartFromUser()
+    setCart(cart)
+  }
+
+  useEffect(() => {
+    getCart()
+  }, [isCartOpen])
+
   return (
     <AnimatePresence>
       {isCartOpen && (
@@ -54,12 +67,26 @@ const Cart = ({
                 <h1 className="text-xl">Please log in first</h1>
                 <Login_button />
               </div>
+            ) : cart == null ? (
+              <Loading />
             ) : cart.length == 0 ? (
               <div className="h-full w-full flex justify-center items-center">
                 <h1 className="text-xl">Your cart is empty</h1>
               </div>
             ) : (
-              <div></div>
+              <>
+                <div className="flex flex-col flex-grow flex-1 justify-start overflow-y-auto items-center divide-y-2 divide-black p-4 w-full mt-10 ">
+                  {cart.map((c) => (
+                    <Product getCart={getCart} key={c.id} c={c} />
+                  ))}
+                </div>
+                <Link
+                  href={'/checkout'}
+                  className="w-full bg-black text-white text-center py-5 text-lg font-bold active:scale-95 cursor-pointer"
+                >
+                  Check Out
+                </Link>
+              </>
             )}
           </motion.div>
         </>
@@ -68,3 +95,11 @@ const Cart = ({
   )
 }
 export default Cart
+
+function Loading() {
+  return (
+    <div className="h-full w-full flex justify-center items-center">
+      <LoaderCircle size={80} strokeWidth={1} className="animate-spin" />
+    </div>
+  )
+}

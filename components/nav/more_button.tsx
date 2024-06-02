@@ -1,11 +1,22 @@
 'use client'
 
 import { AlignJustify } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import More from './more'
 
 const More_button = ({ logged, role }: { logged: boolean; role: string }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('overflow-hidden')
+    } else {
+      setTimeout(() => {
+        document.body.classList.remove('overflow-hidden')
+      }, 700)
+    }
+  }, [isOpen])
+
   return (
     <>
       <button

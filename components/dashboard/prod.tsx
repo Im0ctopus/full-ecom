@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import { Pencil, Trash2 } from 'lucide-react'
 import Edit from './edit'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { handleDeleteProd } from '@/lib/actions'
 import { toast } from 'sonner'
+import { getProdImage } from '@/lib/queries'
 
 type TProd = {
   id: number
@@ -14,7 +15,7 @@ type TProd = {
   price: number
   category: number
   sales: number
-  main: number | null
+  main: boolean
   discount: number | null
 }
 
@@ -28,6 +29,16 @@ const Prod = ({
   categories: any
 }) => {
   const [isOpen, setIsopen] = useState<boolean>(false)
+  const [image, setImage] = useState<number | null>(null)
+
+  const getImage = async () => {
+    setImage(await getProdImage(prod.id))
+  }
+
+  useEffect(() => {
+    getImage()
+  }, [])
+
   return (
     <>
       <div
@@ -35,14 +46,18 @@ const Prod = ({
           index % 2 != 0 && 'bg-zinc-100'
         }`}
       >
-        <Image
-          src="https://static-cdn.jtvnw.net/jtv_user_pictures/xqc-profile_image-9298dca608632101-150x150.jpeg"
-          width={50}
-          height={50}
-          alt={`Picture of ${prod.name}`}
-          draggable={false}
-          className="rounded-md"
-        />
+        {image == null ? (
+          <div className="aspect-square w-12"></div>
+        ) : (
+          <Image
+            src={`/img/${image}.jpg`}
+            width={50}
+            height={50}
+            alt={`Picture of ${prod.name}`}
+            draggable={false}
+            className="rounded-md"
+          />
+        )}
         <p className="flex-1 text-ellipsis text-nowrap overflow-hidden font-medium text-lg">
           {prod.name}
         </p>
@@ -76,6 +91,7 @@ const Prod = ({
         setIsopen={setIsopen}
         prod={prod}
         categories={categories}
+        getImage={getImage}
       />
     </>
   )

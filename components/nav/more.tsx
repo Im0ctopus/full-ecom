@@ -49,7 +49,7 @@ const More = ({
             <div className="flex flex-col w-full justify-start items-start">
               <Link
                 onClick={() => setIsOpen(false)}
-                href={'/'}
+                href={'/products'}
                 className="group flex justify-start items-center gap-2 pl-3 cursor-pointer hover:underline transition-all py-1"
               >
                 <Diamond
@@ -62,7 +62,7 @@ const More = ({
               </Link>
               <Link
                 onClick={() => setIsOpen(false)}
-                href={'/'}
+                href={'/categories'}
                 className="group flex justify-start items-center gap-2 pl-3 cursor-pointer hover:underline transition-all py-1"
               >
                 <Diamond
@@ -73,7 +73,7 @@ const More = ({
                   Categories
                 </h3>
               </Link>
-              {(role == 'Admin' || role == 'Moderator') && (
+              {(role == 'Admin' || role == 'Moderator' || role == 'Owner') && (
                 <Link
                   onClick={() => setIsOpen(false)}
                   href={'/backoffice'}

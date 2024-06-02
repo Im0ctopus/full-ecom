@@ -4,14 +4,7 @@ import { useEffect, useState } from 'react'
 import { ShoppingCart } from 'lucide-react'
 import Cart from './cart'
 
-type TCart = {
-  userId: number
-  productId: number
-  sizeId?: number | null
-  amount: number
-}
-
-const Cart_btn = ({ logged, cart }: { logged: boolean; cart: TCart[] }) => {
+const Cart_btn = ({ logged }: { logged: boolean }) => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
 
   useEffect(() => {
@@ -33,7 +26,6 @@ const Cart_btn = ({ logged, cart }: { logged: boolean; cart: TCart[] }) => {
         <ShoppingCart size={30} />
       </button>
       <Cart
-        cart={cart}
         isCartOpen={isCartOpen}
         logged={logged}
         setIsCartOpen={setIsCartOpen}

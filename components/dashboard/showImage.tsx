@@ -28,7 +28,7 @@ const ShowProdImages = ({
       setImages(newImgs)
     }
     fetchImages()
-  }, [newImage, del])
+  }, [newImage, del, prod_id])
 
   if (!images)
     return (
@@ -42,7 +42,6 @@ const ShowProdImages = ({
     )
   else if (images.length == 0) return <></>
   else {
-    images.sort((a, b) => (a.active ?? 0) - (b.active ?? 0))
     return (
       <>
         {images.map((img, index) => (

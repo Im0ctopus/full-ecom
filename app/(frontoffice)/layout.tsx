@@ -3,6 +3,8 @@ import { Poppins } from 'next/font/google'
 import '../globals.css'
 import SessionProvider from '@/components/session_provider'
 import Nav from '@/components/nav/nav'
+import Footer from '@/components/footer'
+import { Toaster } from 'sonner'
 
 const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -20,14 +22,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full scroll-smooth">
       <body
         className={`${poppins.className} relative h-full font-sans antialiased`}
       >
         <SessionProvider>
+          <Toaster richColors />
           <Nav />
           <main className="flex flex-col min-h-screen relative pt-20">
             <div className="flex-grow flex-1">{children}</div>
+            <Footer />
           </main>
         </SessionProvider>
       </body>
